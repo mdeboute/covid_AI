@@ -1,0 +1,57 @@
+Exploratory Data Analysis
+
+Objectif: comprendre au maximum les données dont on dispose pour définir une stratégie de modélisation.
+
+I - Analyse de la forme:
+	§ Identification de la target : SARS-Cov-2 exam result
+	§ Nombre des lignes et de colonnes : (5644, 111)
+	§ Identification des valeurs manquantes : beaucoup de NaN (moitié des valeurs > 90% de NaN), 2 groupes de données intéressantes : 76% de NaN —> test virus, 89% de NaN —> test sanguin
+	§ Types de variables : qualitatives : 70, quantitatives : 41
+
+II - Analyse du fond:
+	§ Visualisation de la target (histogramme/boxplot) : ~10% de positifs
+	§ Compréhension des différentes variables (recherche) : -variables continues standardisées car on observe qu’elles sont toutes centrées en 0 et ont un écart-type de 1, beaucoup de distributions normales mais aussi asymétriques (skewed), test sanguin
+
+- Age quantile : difficile d'interpréter ce graphique —> manque d’informations (on peut émettre des hypothèses mais ce n’est pas très  important)
+
+- Variables qualitatives : binaires (0,1), viral, rhinovirus semble très élevé
+
+	§ Visualisation des relations : features/target : -target/blood : les taux de leukocytes, platelets, monocytes semblent liés au covid —> hypothèse à tester
+
+-target/age : individu de faible âge sont très peu contaminés ? ⚠️ 
+
+-target/virus : les doubles maladies sont très rares, Rhinovirus/Enterovirus positif - covid19 négatif ? —> hypothèse à tester ? Pas forcément de lien, peut-être que la région à subie une épidémie de ce virus, de plus on peut avoir deux virus en même temps cela n’a peut-être aucun lien (certainement).
+
+	§ Identification des outliers
+
+Conclusion initiale : - beaucoup de données manquantes au mieux on garde 20% du dataset. 
+
+- 2 groupes intéressants (Viral/Sanguin)
+
+presque pas de variables discriminantes pour distinguer les cas positifs/négatifs donc c’est compliqué de faire de la prédiction avec seulement ces tests sanguins
+
+Cependant on a réussi à isoler des variables intéressantes qui sont susceptibles de jouer un rôle  non négligeable (monocytes)
+
+Analyse plus poussée :
+
+$Relations Variables/Variables :
+
+-blood_data/blood_data: certaines variables sont très corrélées (à plus de 0.9) donc à surveillez pour plus tard…
+
+-blood_data/age : très faible corrélation entre les variables (pas besoin de faire d’hypothèses)
+
+-viral/viral : influenza rapid test donne de mauvais résultat, il faut peut-être le laisser tomber (reconnu comme peu fiable sur internet)
+
+-maladie/blood_data : on peut observer que les taux sanguins entre malades et covid19 sont différents
+
+-hospitalisation/malade : /
+
+-hospitalisation/blood : intéressant si on veut faire un modèle de prédiction d’affection au service d'hôpital en fonction des analyses sanguines du patient
+
+$Analyse NaN :  viral : 1350 (92/8), blood : 600 (87/13)
+$Hypothèses nulles (H0) : 
+
+-les individus atteints du covid19 ont des taux de Leukocytes, Monocytes, Platelets différents :
+	-H0 : les taux moyens sont égaux chez les individus positifs et négatifs 
+
+	Un t-test nous a permis de rejeter H0 donc on a bien une différence de taux chez les personnes atteintes du covid19.
